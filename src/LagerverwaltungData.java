@@ -12,6 +12,10 @@ public class LagerverwaltungData {
         loadData();
     }
 
+    public HashMap<Character, Item[][]> getStorage() {
+        return storage;
+    }
+
     public boolean isPartNoEqual(Item item1, Item item2) {
         try {
             return item1.getPartNumber() == item2.getPartNumber();
@@ -45,7 +49,7 @@ public class LagerverwaltungData {
         } else {
             System.out.println("Shelf unit is empty");
             //shelf is empty
-            storage.get(shelfname)[y][x] = item;
+            storage.get(shelfname)[x][y] = item;
             return 0;
         }
     }
@@ -53,22 +57,22 @@ public class LagerverwaltungData {
     public boolean removeItem(char shelfname, int x, int y) {
         if (isShelfUnitEmpty(shelfname, x, y))
             return false;
-        storage.get(shelfname)[y][x] = null;
+        storage.get(shelfname)[x][y] = null;
         return true;
     }
 
     private void createShelf(char shelfname) {
-        Item[][] items = new Item[9][9];
+        Item[][] items = new Item[10][10];
         storage.put(shelfname, items);
     }
 
     public Item getItem(char shelfname, int x, int y) {
-        return storage.get(shelfname)[y][x];
+        return storage.get(shelfname)[x][y];
     }
 
     public boolean isShelfUnitEmpty(char shelfname, int x, int y) {
         Item[][] shelf = storage.get(shelfname);
-        return shelf[y][x] == null;
+        return shelf[x][y] == null;
     }
 
     public char[] getShelfnames() { //ToDo

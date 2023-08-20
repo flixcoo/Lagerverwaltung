@@ -1,6 +1,5 @@
 import javax.swing.*;
 import javax.swing.border.Border;
-//import DocumentListener;
 import java.awt.*;
 
 public class LagerverwaltungGUI extends JFrame {
@@ -23,6 +22,7 @@ public class LagerverwaltungGUI extends JFrame {
     private final JButton insertButton;
     private final JButton removeButton;
     private final JButton clearButton;
+    private final JButton storageButton;
 
     //Item-Area
     private final JPanel itemPanel;
@@ -126,6 +126,9 @@ public class LagerverwaltungGUI extends JFrame {
         clearButton = new JButton("Clear");
         buttonPanel.add(clearButton);
 
+        storageButton = new JButton("Lager anzeigen");
+        buttonPanel.add(storageButton);
+
         this.add(buttonPanel);
 
         //Item-Panel
@@ -168,9 +171,9 @@ public class LagerverwaltungGUI extends JFrame {
         callButton.addActionListener(e -> callItem());
         insertButton.addActionListener(e -> insertItem());
         exitButton.addActionListener(e -> exit());
-        //addItemButton.addActionListener(e -> insertItemViaPopUp());
         clearButton.addActionListener(e -> clearAllTextfields());
         removeButton.addActionListener(e -> removeItem());
+        storageButton.addActionListener(e -> showStorage());
 
 
         //Document-Listener
@@ -183,7 +186,10 @@ public class LagerverwaltungGUI extends JFrame {
         textYcoord.getDocument().addDocumentListener(documentListener);
 
     }
-
+    private void showStorage()
+    {
+        StoragecontentPane show = new StoragecontentPane(d.getStorage(), d);
+    }
     private boolean checkCoordValues(JTextField textfield) {
         int value;
         try {
@@ -259,18 +265,17 @@ public class LagerverwaltungGUI extends JFrame {
             }
             int returnCode = d.insertItem(item, item.getShelf(), item.getXcoord(), item.getYcoord());
 
-            if(returnCode == 0) {
+            if (returnCode == 0) {
                 System.out.println("[System]: Insert successful");
                 JOptionPane.showMessageDialog(this, "Das Item wurde erfolgreich hinzugefügt", "Erfolg", JOptionPane.INFORMATION_MESSAGE);
             }
 
-            if(returnCode == 1) {
+            if (returnCode == 1) {
                 System.err.println("[Error]: Item too big for shelf unit");
                 JOptionPane.showMessageDialog(this, "Das Item konnte nicht hinzugefügt werden.\nGrund: Das Item ist zu groß.", "Fehlgeschlagen", JOptionPane.ERROR_MESSAGE);
             }
 
-            if(returnCode == 2)
-            {
+            if (returnCode == 2) {
                 System.err.println("[Error]: Shelf unit is occupied");
                 JOptionPane.showMessageDialog(this, "Das Item konnte nicht hinzugefügt werden.\nGrund: Das Fach ist bereits belegt.", "Fehlgeschlagen", JOptionPane.ERROR_MESSAGE);
             }
@@ -284,7 +289,7 @@ public class LagerverwaltungGUI extends JFrame {
             if (!(checkCoordValues(textXcoord) && checkCoordValues(textYcoord)))
                 return;
             int x = Integer.parseInt(textXcoord.getText());
-            int y = Integer.parseInt(textXcoord.getText());
+            int y = Integer.parseInt(textYcoord.getText());
             Item item = d.getItem(shelf, x, y);
             if (submitDialog("Item entfernen", "Möchtest du das Item " + item.getArticleName() + " (Teile-Nr.: " + item.getPartNumber() + ") aus dem Lager entfernen?")) {
                 if (d.removeItem(shelf, x, y)) {
