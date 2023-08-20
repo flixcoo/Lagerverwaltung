@@ -1,56 +1,53 @@
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+//import DocumentListener;
 import java.awt.*;
 
 public class LagerverwaltungGUI extends JFrame {
     private final String[] shelfnames = {"A", "B", "C", "D", "E", "F", "G", "H"};
     private final String[] shelfNums = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}; //ToDo
-    private LagerverwaltungData d;
+    private final LagerverwaltungData d;
 
     //Search-Area
-    private JPanel searchPanel;
-    private JLabel labelShelfname;
-    private JComboBox dropdownShelf;
-    private JLabel xcoord;
-    private JTextField textXcoord;
-    private JLabel ycoord;
-    private JTextField textYcoord;
+    private final JPanel searchPanel;
+    private final JLabel labelShelfname;
+    private final JComboBox dropdownShelf;
+    private final JLabel xcoord;
+    private final JTextField textXcoord;
+    private final JLabel ycoord;
+    private final JTextField textYcoord;
 
     //Button-Area
-    private JPanel buttonPanel;
-    private JButton callButton;
-    private JButton insertButton;
-    private JButton removeButton;
-    private JButton clearButton;
+    private final JPanel buttonPanel;
+    private final JButton callButton;
+    private final JButton insertButton;
+    private final JButton removeButton;
+    private final JButton clearButton;
 
     //Item-Area
-    private JPanel itemPanel;
-    private JLabel labelArtName;
-    private JLabel labelPartNo;
-    private JLabel labelSize;
-    private JLabel labelAmount;
-    private JTextField textArtName;
-    private JTextField textPartNo;
-    private JTextField textSize;
-    private JTextField textAmount;
+    private final JPanel itemPanel;
+    private final JLabel labelArtName;
+    private final JLabel labelPartNo;
+    private final JLabel labelSize;
+    private final JLabel labelAmount;
+    private final JTextField textArtName;
+    private final JTextField textPartNo;
+    private final JTextField textSize;
+    private final JTextField textAmount;
 
 
     //Menu
-    private JMenuBar menubar;
-    private JMenu dataMenuButton;
-    private JMenu itemMenuButton;
-    private JMenu debugMenuButton;
-    private JMenuItem exitButton;
-    private JMenuItem addItemButton;
-    private JMenuItem removeItemButton;
+    private final JMenuBar menubar;
+    private final JMenu dataMenuButton;
+    private final JMenu itemMenuButton;
+    private final JMenu debugMenuButton;
+    private final JMenuItem exitButton;
+    private final JMenuItem addItemButton;
+    private final JMenuItem removeItemButton;
 
 
     public LagerverwaltungGUI(LagerverwaltungData data) {
         this.d = data;
-
-
         this.setTitle("Lagerverwaltung");
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
@@ -177,190 +174,20 @@ public class LagerverwaltungGUI extends JFrame {
 
 
         //Document-Listener
-        textXcoord.getDocument().addDocumentListener(new DocumentListener() {
-            public void changedUpdate(DocumentEvent e) {
-                changed();
-            }
+        DocumentListener documentListener = new DocumentListener(textArtName,textPartNo,textAmount,textSize,textXcoord,textYcoord,defaultBorder,insertButton, callButton, removeButton);
+        textArtName.getDocument().addDocumentListener(documentListener);
+        textPartNo.getDocument().addDocumentListener(documentListener);
+        textAmount.getDocument().addDocumentListener(documentListener);
+        textSize.getDocument().addDocumentListener(documentListener);
+        textXcoord.getDocument().addDocumentListener(documentListener);
+        textYcoord.getDocument().addDocumentListener(documentListener);
 
-            public void removeUpdate(DocumentEvent e) {
-                changed();
-            }
-
-            public void insertUpdate(DocumentEvent e) {
-                changed();
-            }
-
-            public void changed() {
-                if (textYcoord.getText().equals("") || textXcoord.getText().equals("")) {
-                    callButton.setEnabled(false);
-                    removeButton.setEnabled(false);
-                    insertButton.setEnabled(false);
-                } else if (!((textArtName.getText().equals("") || textPartNo.getText().equals("")) ||
-                        (textSize.getText().equals("") || textAmount.getText().equals(""))) ||
-                        (textXcoord.getText().equals("") || textYcoord.getText().equals(""))) {
-                    insertButton.setEnabled(true);
-                    callButton.setEnabled(true);
-                    removeButton.setEnabled(true);
-                } else {
-                    callButton.setEnabled(true);
-                    removeButton.setEnabled(true);
-                }
-                textXcoord.setBorder(defaultBorder);
-                textYcoord.setBorder(defaultBorder);
-            }
-        });
-
-        textYcoord.getDocument().addDocumentListener(new DocumentListener() {
-            public void changedUpdate(DocumentEvent e) {
-                changed();
-            }
-
-            public void removeUpdate(DocumentEvent e) {
-                changed();
-            }
-
-            public void insertUpdate(DocumentEvent e) {
-                changed();
-            }
-
-            private void changed() {
-                if (textYcoord.getText().equals("") || textXcoord.getText().equals("")) {
-                    callButton.setEnabled(false);
-                    removeButton.setEnabled(false);
-                    insertButton.setEnabled(false);
-                } else if (!((textArtName.getText().equals("") || textPartNo.getText().equals("")) ||
-                        (textSize.getText().equals("") || textAmount.getText().equals(""))) ||
-                        (textXcoord.getText().equals("") || textYcoord.getText().equals(""))) {
-                    insertButton.setEnabled(true);
-                    callButton.setEnabled(true);
-                    removeButton.setEnabled(true);
-                } else {
-                    callButton.setEnabled(true);
-                    removeButton.setEnabled(true);
-                }
-                textXcoord.setBorder(defaultBorder);
-                textYcoord.setBorder(defaultBorder);
-            }
-        });
-
-        textArtName.getDocument().addDocumentListener(new DocumentListener() {
-            public void changedUpdate(DocumentEvent e) {
-                changed();
-            }
-
-            public void removeUpdate(DocumentEvent e) {
-                changed();
-            }
-
-            public void insertUpdate(DocumentEvent e) {
-                changed();
-            }
-
-            public void changed() {
-                if (((textArtName.getText().equals("") || textPartNo.getText().equals("")) ||
-                        (textSize.getText().equals("") || textAmount.getText().equals(""))) ||
-                        (textXcoord.getText().equals("") || textYcoord.getText().equals(""))) {
-                    insertButton.setEnabled(false);
-                } else {
-                    insertButton.setEnabled(true);
-                }
-                textArtName.setBorder(defaultBorder);
-                textPartNo.setBorder(defaultBorder);
-                textSize.setBorder(defaultBorder);
-                textAmount.setBorder(defaultBorder);
-            }
-        });
-
-        textPartNo.getDocument().addDocumentListener(new DocumentListener() {
-            public void changedUpdate(DocumentEvent e) {
-                changed();
-            }
-
-            public void removeUpdate(DocumentEvent e) {
-                changed();
-            }
-
-            public void insertUpdate(DocumentEvent e) {
-                changed();
-            }
-
-            public void changed() {
-                if (((textArtName.getText().equals("") || textPartNo.getText().equals("")) ||
-                        (textSize.getText().equals("") || textAmount.getText().equals(""))) ||
-                        (textXcoord.getText().equals("") || textYcoord.getText().equals(""))) {
-                    insertButton.setEnabled(false);
-                } else {
-                    insertButton.setEnabled(true);
-                }
-                textArtName.setBorder(defaultBorder);
-                textPartNo.setBorder(defaultBorder);
-                textSize.setBorder(defaultBorder);
-                textAmount.setBorder(defaultBorder);
-            }
-        });
-
-        textSize.getDocument().addDocumentListener(new DocumentListener() {
-            public void changedUpdate(DocumentEvent e) {
-                changed();
-            }
-
-            public void removeUpdate(DocumentEvent e) {
-                changed();
-            }
-
-            public void insertUpdate(DocumentEvent e) {
-                changed();
-            }
-
-            public void changed() {
-                if (((textArtName.getText().equals("") || textPartNo.getText().equals("")) ||
-                        (textSize.getText().equals("") || textAmount.getText().equals(""))) ||
-                        (textXcoord.getText().equals("") || textYcoord.getText().equals(""))) {
-                    insertButton.setEnabled(false);
-                } else {
-                    insertButton.setEnabled(true);
-                }
-                textArtName.setBorder(defaultBorder);
-                textPartNo.setBorder(defaultBorder);
-                textSize.setBorder(defaultBorder);
-                textAmount.setBorder(defaultBorder);
-            }
-        });
-
-        textAmount.getDocument().addDocumentListener(new DocumentListener() {
-            public void changedUpdate(DocumentEvent e) {
-                changed();
-            }
-
-            public void removeUpdate(DocumentEvent e) {
-                changed();
-            }
-
-            public void insertUpdate(DocumentEvent e) {
-                changed();
-            }
-
-            public void changed() {
-                if (((textArtName.getText().equals("") || textPartNo.getText().equals("")) ||
-                        (textSize.getText().equals("") || textAmount.getText().equals(""))) ||
-                        (textXcoord.getText().equals("") || textYcoord.getText().equals(""))) {
-                    insertButton.setEnabled(false);
-                } else {
-                    insertButton.setEnabled(true);
-                }
-                textArtName.setBorder(defaultBorder);
-                textPartNo.setBorder(defaultBorder);
-                textSize.setBorder(defaultBorder);
-                textAmount.setBorder(defaultBorder);
-            }
-        });
     }
 
     private boolean checkCoordValues(JTextField textfield) {
-        int value = -1;
+        int value;
         try {
             value = Integer.parseInt(textfield.getText());
-
         } catch (NumberFormatException e) {
             System.err.println("[Error]: Value is not valid.");
             e.printStackTrace();
@@ -374,6 +201,7 @@ public class LagerverwaltungGUI extends JFrame {
             textfield.setBorder(BorderFactory.createLineBorder(Color.decode("0xed3b3b"), 2));
             JOptionPane.showMessageDialog(this, "Das angegebene Regalfach existiert nicht.", "Falsche Eingabe", JOptionPane.ERROR_MESSAGE);
             return false;
+
         }
         return true;
     }
@@ -400,8 +228,7 @@ public class LagerverwaltungGUI extends JFrame {
                 textAmount.setText(String.valueOf(item.getAmount()));
                 textSize.setText(String.valueOf(item.getSize()));
             }
-        } else
-            return;
+        }
     }
 
     private void insertItem() {
@@ -417,13 +244,12 @@ public class LagerverwaltungGUI extends JFrame {
                         dropdownShelf.getSelectedItem().toString().charAt(0),
                         Integer.parseInt(textXcoord.getText()),
                         Integer.parseInt(textYcoord.getText()));
-                if(!d.isPartNoEqual(item, d.getItem(item.getShelf(), item.getXcoord(), item.getYcoord())))
-                {
+                if (!d.isPartNoEqual(item, d.getItem(item.getShelf(), item.getXcoord(), item.getYcoord()))) {
                     JOptionPane.showMessageDialog(this, "Das Item konnte nicht hinzugefügt werden.\nGrund: Das Fach ist durch ein anderes Item belegt.", "Fehlgeschlagen", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
-                if((item.getSize() + d.getItem(item.getShelf(), item.getXcoord(), item.getYcoord()).getSize()) > 8.0)
+                if ((item.getSize() + d.getItem(item.getShelf(), item.getXcoord(), item.getYcoord()).getSize()) > 8.0)
                     JOptionPane.showMessageDialog(this, "Das Item konnte nicht hinzugefügt werden.\nGrund: Das Item ist zu groß.", "Fehlgeschlagen", JOptionPane.ERROR_MESSAGE);
 
                 if (d.insertItem(item, item.getShelf(), item.getXcoord(), item.getYcoord()))

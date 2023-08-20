@@ -1,15 +1,15 @@
 import java.io.Serializable;
 import java.util.Arrays;
 
-public class Item implements Serializable //Item-Klasse ist enthalten in zu speicherndem Objekt, deswegen Implementierung des Serializable-Interface
+public class Item //implements Serializable //Item-Klasse ist enthalten in zu speicherndem Objekt, deswegen Implementierung des Serializable-Interface
 {
-    private String articleName;
-    private int partNumber;
+    private final String articleName;
+    private final int partNumber;
     private double size;
     private int amount;
-    private char shelf;
-    private int xCoordinate;
-    private int yCoordinate;
+    private final char shelf;
+    private final int xCoordinate;
+    private final int yCoordinate;
 
     public Item(String articleName, int partNumber, double size, int amount, char shelf, int x, int y) {
         this.articleName = articleName;

@@ -5,7 +5,7 @@ public class LagerverwaltungData {
     private HashMap<Character, Item[][]> storage; // Key ist Regalname, Array ist Regalinhalt
     private final char[] shelfnames = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
     double maxShelfUnitSize = 8.0;
-    private File file = new File("./data/data.txt");
+    private final File file = new File("./data/data.txt");
 
     public LagerverwaltungData() {
         storage = new HashMap<Character, Item[][]>();
@@ -13,9 +13,7 @@ public class LagerverwaltungData {
     }
 
     public boolean isPartNoEqual(Item item1, Item item2){
-        if(item1.getPartNumber() == item2.getPartNumber())
-            return true;
-        return false;
+        return item1.getPartNumber() == item2.getPartNumber();
     }
     public boolean insertItem(Item item, char shelfname, int x, int y) {
         if (!isShelfUnitEmpty(shelfname, x, y))    //Das Regal ist belegt
@@ -43,7 +41,7 @@ public class LagerverwaltungData {
     }
 
     private void createShelf(char shelfname) {
-        Item items[][] = new Item[9][9];
+        Item[][] items = new Item[9][9];
         storage.put(shelfname, items);
     }
 
@@ -53,12 +51,10 @@ public class LagerverwaltungData {
 
     public boolean isShelfUnitEmpty(char shelfname, int x, int y) {
         Item[][] shelf = storage.get(shelfname);
-        if (shelf[y][x] == null)
-            return true;
-        return false;
+        return shelf[y][x] == null;
     }
 
-    public char[] getShelfnames() {
+    public char[] getShelfnames() { //ToDo
         return shelfnames;
     }
 
@@ -85,9 +81,11 @@ public class LagerverwaltungData {
             return;
 
         } catch (IOException e) {
+            System.err.println("[Error]: Failed to read data from storage");
             System.err.println("[Error]: IOException");
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
+            System.err.println("[Error]: Failed to read data from storage");
             System.err.println("[Error]: ClassNotFoundException");
             e.printStackTrace();
         }
