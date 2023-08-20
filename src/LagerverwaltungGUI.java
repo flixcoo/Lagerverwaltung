@@ -242,35 +242,40 @@ public class LagerverwaltungGUI extends JFrame {
             return;
 
         if (submitDialog("Item einfügen", "Möchtest du " + textAmount.getText() + "x " + textArtName.getText() + " (Teile-Nr.: " + textPartNo.getText() + ") in das Lager übernehmen?")) {
+            Item item;
             try {
-                Item item = new Item(textArtName.getText(),
+                item = new Item(textArtName.getText(),
                         Integer.parseInt(textPartNo.getText()),
                         Double.parseDouble(textSize.getText()),
                         Integer.parseInt(textAmount.getText()),
                         dropdownShelf.getSelectedItem().toString().charAt(0),
                         Integer.parseInt(textXcoord.getText()),
                         Integer.parseInt(textYcoord.getText()));
-                if (!d.isPartNoEqual(item, d.getItem(item.getShelf(), item.getXcoord(), item.getYcoord()))) {
-                    JOptionPane.showMessageDialog(this, "Das Item konnte nicht hinzugefügt werden.\nGrund: Das Fach ist durch ein anderes Item belegt.", "Fehlgeschlagen", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                if ((item.getSize() + d.getItem(item.getShelf(), item.getXcoord(), item.getYcoord()).getSize()) > 8.0)
-                    JOptionPane.showMessageDialog(this, "Das Item konnte nicht hinzugefügt werden.\nGrund: Das Item ist zu groß.", "Fehlgeschlagen", JOptionPane.ERROR_MESSAGE);
-
-                if (d.insertItem(item, item.getShelf(), item.getXcoord(), item.getYcoord()))
-                    System.out.println("[System]: Insert successful");
-                else {
-                    System.out.println("[System]: Insert not successful");
-                    JOptionPane.showMessageDialog(this, "Das Item konnte nicht hinzugefügt werden.\nMögliche Gründe: Fach ist voll, Beschädigtes Item-Objekt", "Fehlgeschlagen", JOptionPane.ERROR_MESSAGE);
-                }
             } catch (NumberFormatException e) {
                 System.err.println("[Error]: NumberFormatException");
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(this, "Das Item enthält Werte, welche nicht übernommen werden konnten.", "Falsche Argumente", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            int returnCode = d.insertItem(item, item.getShelf(), item.getXcoord(), item.getYcoord());
+
+            if(returnCode == 0) {
+                System.out.println("[System]: Insert successful");
+                JOptionPane.showMessageDialog(this, "Das Item wurde erfolgreich hinzugefügt", "Erfolg", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+            if(returnCode == 1) {
+                System.err.println("[Error]: Item too big for shelf unit");
+                JOptionPane.showMessageDialog(this, "Das Item konnte nicht hinzugefügt werden.\nGrund: Das Item ist zu groß.", "Fehlgeschlagen", JOptionPane.ERROR_MESSAGE);
+            }
+
+            if(returnCode == 2)
+            {
+                System.err.println("[Error]: Shelf unit is occupied");
+                JOptionPane.showMessageDialog(this, "Das Item konnte nicht hinzugefügt werden.\nGrund: Das Fach ist bereits belegt.", "Fehlgeschlagen", JOptionPane.ERROR_MESSAGE);
             }
         } else
-            System.out.println("[info]: Submit denied");
+            System.out.println("[System]: Insert submit denied");
     }
 
     private void removeItem() {

@@ -1,5 +1,5 @@
 import java.io.*;
-import java.util.*;
+import java.util.HashMap;
 
 public class LagerverwaltungData {
     private HashMap<Character, Item[][]> storage; // Key ist Regalname, Array ist Regalinhalt
@@ -12,24 +12,41 @@ public class LagerverwaltungData {
         loadData();
     }
 
-    public boolean isPartNoEqual(Item item1, Item item2){
-        return item1.getPartNumber() == item2.getPartNumber();
-    }
-    public boolean insertItem(Item item, char shelfname, int x, int y) {
-        if (!isShelfUnitEmpty(shelfname, x, y))    //Das Regal ist belegt
+    public boolean isPartNoEqual(Item item1, Item item2) {
+        try {
+            return item1.getPartNumber() == item2.getPartNumber();
+        }catch(NullPointerException e)
         {
-            if (    (isPartNoEqual(getItem(shelfname, x, y), item)) &&
-                    (((getItem(shelfname, x, y).getSize() + item.getSize())) <= maxShelfUnitSize)) //Das Regal enthält das gleiche Item und hat noch Platz
-            {
-                getItem(shelfname, x, y).increaseAmount(item.getAmount());
-                getItem(shelfname, x, y).increaseSize(item.getSize());
-                return true;
-            } else {//Regal enthält nicht das gleiche Item oder hat keinen Platz mehr
-                return false;
+            System.out.println("[Error]: NullPointerException");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * @return 0 = successful insert, 1 = item size is too big, 2 = shelf unit is occupied
+     */
+    public int insertItem(Item item, char shelfname, int x, int y) {
+        if (!isShelfUnitEmpty(shelfname, x, y))    //Is shelf occupied?
+        {
+            System.out.println("Shelf unit is not empty");
+            if (isPartNoEqual(getItem(shelfname, x, y), item)) //is partnumber equal?
+                if (getItem(shelfname, x, y).getSize() + item.getSize() <= maxShelfUnitSize) //is space left?
+                {
+                    getItem(shelfname, x, y).increaseAmount(item.getAmount());
+                    getItem(shelfname, x, y).increaseSize(item.getSize());
+                    return 0; //successful insert
+                } else {
+                    return 1; //no space left
+                }
+            else {
+                return 2; //
             }
         } else {
+            System.out.println("Shelf unit is empty");
+            //shelf is empty
             storage.get(shelfname)[y][x] = item;
-            return true;
+            return 0;
         }
     }
 
