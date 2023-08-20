@@ -6,16 +6,16 @@ import java.awt.*;
 
 public class LagerverwaltungGUI extends JFrame {
     private final String[] shelfnames = {"A", "B", "C", "D", "E", "F", "G", "H"};
-    private final String standardText = "Artikelnummer:\nArtikelname\nGroesse:\nAnzahl";
+    private final String[] shelfNums = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}; //ToDo
     private LagerverwaltungData d;
 
     //Search-Area
-    private JOptionPane optionPane;
     private JPanel searchPanel;
     private JLabel labelShelfname;
+    private JComboBox dropdownShelf;
     private JLabel xcoord;
-    private JLabel ycoord;
     private JTextField textXcoord;
+    private JLabel ycoord;
     private JTextField textYcoord;
 
     //Button-Area
@@ -45,7 +45,7 @@ public class LagerverwaltungGUI extends JFrame {
     private JMenuItem exitButton;
     private JMenuItem addItemButton;
     private JMenuItem removeItemButton;
-    private JComboBox dropdown;
+
 
     public LagerverwaltungGUI(LagerverwaltungData data) {
         this.d = data;
@@ -88,8 +88,8 @@ public class LagerverwaltungGUI extends JFrame {
         labelShelfname = new JLabel("Regal");
         searchPanel.add(labelShelfname);
 
-        dropdown = new JComboBox(shelfnames);
-        searchPanel.add(dropdown);
+        dropdownShelf = new JComboBox(shelfnames);
+        searchPanel.add(dropdownShelf);
 
         xcoord = new JLabel("x:");
         searchPanel.add(xcoord);
@@ -146,7 +146,7 @@ public class LagerverwaltungGUI extends JFrame {
         //textArtName.setEditable(false);
         textArtName.setColumns(10);
 
-        labelSize = new JLabel("Groesse");
+        labelSize = new JLabel("Größe");
         textSize = new JTextField();
         //textSize.setEditable(false);
         textSize.setColumns(10);
@@ -171,8 +171,9 @@ public class LagerverwaltungGUI extends JFrame {
         callButton.addActionListener(e -> callItem());
         insertButton.addActionListener(e -> insertItem());
         exitButton.addActionListener(e -> exit());
-        addItemButton.addActionListener((e -> insertItem()));
+        //addItemButton.addActionListener(e -> insertItemViaPopUp());
         clearButton.addActionListener(e -> clearAllTextfields());
+        removeButton.addActionListener(e -> removeItem());
 
 
         //Document-Listener
@@ -180,21 +181,26 @@ public class LagerverwaltungGUI extends JFrame {
             public void changedUpdate(DocumentEvent e) {
                 changed();
             }
+
             public void removeUpdate(DocumentEvent e) {
                 changed();
             }
+
             public void insertUpdate(DocumentEvent e) {
                 changed();
             }
+
             public void changed() {
                 if (textYcoord.getText().equals("") || textXcoord.getText().equals("")) {
                     callButton.setEnabled(false);
                     removeButton.setEnabled(false);
                     insertButton.setEnabled(false);
-                } else if(!((textArtName.getText().equals("") && textPartNo.getText().equals("")) &&
-                        (textSize.getText().equals("") && textAmount.getText().equals(""))) &&
-                        (textXcoord.getText().equals("") && textYcoord.getText().equals(""))) {
+                } else if (!((textArtName.getText().equals("") || textPartNo.getText().equals("")) ||
+                        (textSize.getText().equals("") || textAmount.getText().equals(""))) ||
+                        (textXcoord.getText().equals("") || textYcoord.getText().equals(""))) {
                     insertButton.setEnabled(true);
+                    callButton.setEnabled(true);
+                    removeButton.setEnabled(true);
                 } else {
                     callButton.setEnabled(true);
                     removeButton.setEnabled(true);
@@ -208,21 +214,26 @@ public class LagerverwaltungGUI extends JFrame {
             public void changedUpdate(DocumentEvent e) {
                 changed();
             }
+
             public void removeUpdate(DocumentEvent e) {
                 changed();
             }
+
             public void insertUpdate(DocumentEvent e) {
                 changed();
             }
+
             private void changed() {
                 if (textYcoord.getText().equals("") || textXcoord.getText().equals("")) {
                     callButton.setEnabled(false);
                     removeButton.setEnabled(false);
                     insertButton.setEnabled(false);
-                } else if(!((textArtName.getText().equals("") && textPartNo.getText().equals("")) &&
-                        (textSize.getText().equals("") && textAmount.getText().equals(""))) &&
-                        (textXcoord.getText().equals("") && textYcoord.getText().equals(""))) {
+                } else if (!((textArtName.getText().equals("") || textPartNo.getText().equals("")) ||
+                        (textSize.getText().equals("") || textAmount.getText().equals(""))) ||
+                        (textXcoord.getText().equals("") || textYcoord.getText().equals(""))) {
                     insertButton.setEnabled(true);
+                    callButton.setEnabled(true);
+                    removeButton.setEnabled(true);
                 } else {
                     callButton.setEnabled(true);
                     removeButton.setEnabled(true);
@@ -352,15 +363,16 @@ public class LagerverwaltungGUI extends JFrame {
 
         } catch (NumberFormatException e) {
             System.err.println("[Error]: Value is not valid.");
+            e.printStackTrace();
             textfield.setBorder(BorderFactory.createLineBorder(Color.decode("0xed3b3b"), 2));
-            JOptionPane.showMessageDialog(this, "Die Felder der Koordinaten ernthalten keine gültigen Werte.", "Falsche Eingabe", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Die Felder der Koordinaten ernthalten keine gültigen Werte.", "Falsche Eingabe", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
         if (value > 9 || value < 0) {
             System.err.println("[Error]: Shelf does not exist.");
             textfield.setBorder(BorderFactory.createLineBorder(Color.decode("0xed3b3b"), 2));
-            JOptionPane.showMessageDialog(this, "Das angegebene Regalfach existiert nicht.", "Falsche Eingabe", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Das angegebene Regalfach existiert nicht.", "Falsche Eingabe", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;
@@ -368,7 +380,7 @@ public class LagerverwaltungGUI extends JFrame {
 
     private void callItem() {
         if (checkCoordValues(textXcoord) && checkCoordValues(textYcoord)) {
-            char shelfname = dropdown.getSelectedItem().toString().charAt(0);
+            char shelfname = dropdownShelf.getSelectedItem().toString().charAt(0);
             int x = Integer.parseInt(textXcoord.getText());
             int y = Integer.parseInt(textYcoord.getText());
             Item item = null; //Dummy-Object
@@ -378,7 +390,9 @@ public class LagerverwaltungGUI extends JFrame {
                 item.printDetails();
             } catch (NullPointerException e) {
                 System.err.println("[Error]: Nullpointerexception");
-                JOptionPane.showMessageDialog(this, "Dieses Regalfach hat keinen Inhalt.", "Kein Inhalt", JOptionPane.INFORMATION_MESSAGE);
+                e.printStackTrace();
+                clearAllTextfields();
+                JOptionPane.showMessageDialog(this, "Dieses Regalfach hat keinen Inhalt.", "Kein Inhalt", JOptionPane.WARNING_MESSAGE);
             }
             if (item != null) { //wenn die es keine Nullpointerexception gegeben hat.
                 textPartNo.setText(String.valueOf(item.getPartNumber()));
@@ -391,72 +405,67 @@ public class LagerverwaltungGUI extends JFrame {
     }
 
     private void insertItem() {
-        if (checkCoordValues(textXcoord) && checkCoordValues(textYcoord))
+        if (!(checkCoordValues(textXcoord) && checkCoordValues(textYcoord)))
             return;
-        if (submitDialog("Item einfuegen", "Moechtest du das Item " + textArtName.getText() + " (Teile-Nr.: " + textPartNo.getText() + ") in das Lager übernehmen?")) {
+
+        if (submitDialog("Item einfügen", "Möchtest du " + textAmount.getText() + "x " + textArtName.getText() + " (Teile-Nr.: " + textPartNo.getText() + ") in das Lager übernehmen?")) {
             try {
                 Item item = new Item(textArtName.getText(),
                         Integer.parseInt(textPartNo.getText()),
-                        Integer.parseInt(textSize.getText()),
+                        Double.parseDouble(textSize.getText()),
                         Integer.parseInt(textAmount.getText()),
-                        dropdown.getSelectedItem().toString().charAt(0),
+                        dropdownShelf.getSelectedItem().toString().charAt(0),
                         Integer.parseInt(textXcoord.getText()),
                         Integer.parseInt(textYcoord.getText()));
-                d.insertItem(item, item.getShelf(), item.getXcoord(), item.getYcoord());
+                if(!d.isPartNoEqual(item, d.getItem(item.getShelf(), item.getXcoord(), item.getYcoord())))
+                {
+                    JOptionPane.showMessageDialog(this, "Das Item konnte nicht hinzugefügt werden.\nGrund: Das Fach ist durch ein anderes Item belegt.", "Fehlgeschlagen", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if((item.getSize() + d.getItem(item.getShelf(), item.getXcoord(), item.getYcoord()).getSize()) > 8.0)
+                    JOptionPane.showMessageDialog(this, "Das Item konnte nicht hinzugefügt werden.\nGrund: Das Item ist zu groß.", "Fehlgeschlagen", JOptionPane.ERROR_MESSAGE);
+
+                if (d.insertItem(item, item.getShelf(), item.getXcoord(), item.getYcoord()))
+                    System.out.println("[System]: Insert successful");
+                else {
+                    System.out.println("[System]: Insert not successful");
+                    JOptionPane.showMessageDialog(this, "Das Item konnte nicht hinzugefügt werden.\nMögliche Gründe: Fach ist voll, Beschädigtes Item-Objekt", "Fehlgeschlagen", JOptionPane.ERROR_MESSAGE);
+                }
             } catch (NumberFormatException e) {
                 System.err.println("[Error]: NumberFormatException");
-                JOptionPane.showMessageDialog(this, "Das Item enthält Werte, welche nicht übernommen werden konnten.", "Falsche Argumente", JOptionPane.INFORMATION_MESSAGE);
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Das Item enthält Werte, welche nicht übernommen werden konnten.", "Falsche Argumente", JOptionPane.ERROR_MESSAGE);
             }
         } else
             System.out.println("[info]: Submit denied");
     }
 
-    private void insertItemButton() {
-        JPanel popupPanel = new JPanel();
-
-        JTextField artName = new JTextField(10);
-        JTextField partNo = new JTextField(5);
-        JTextField size = new JTextField(10);
-        JTextField amount = new JTextField(5);
-        JTextField xCoord = new JTextField(2);
-        JTextField yCoord = new JTextField(2);
-
-
-        popupPanel.add(new JLabel("Artikelname:"));
-        popupPanel.add(artName);
-        popupPanel.add(new JLabel("Teile-Nr.:"));
-        popupPanel.add(partNo);
-        popupPanel.add(new JLabel("Groesse:"));
-        popupPanel.add(size);
-        popupPanel.add(new JLabel("Anzahl:"));
-        popupPanel.add(amount);
-        popupPanel.add(Box.createHorizontalStrut(15)); // a spacer
-        popupPanel.add(Box.createVerticalStrut(5));
-        popupPanel.add(new JLabel("Regal:"));
-        popupPanel.add(dropdown);
-        popupPanel.add(new JLabel("x:"));
-        popupPanel.add(xCoord);
-        popupPanel.add(new JLabel("y:"));
-        popupPanel.add(yCoord);
-
-        int result = JOptionPane.showConfirmDialog(this, popupPanel,
-                "Artikel hinzufuegen", JOptionPane.OK_CANCEL_OPTION);
-        if (result == JOptionPane.OK_OPTION) {
-            String tempArtName = artName.getText();
-            int tempPartNo = Integer.parseInt(partNo.getText());
-            double tempSize = Double.valueOf(size.getText());
-            int tempAmount = Integer.parseInt(amount.getText());
-
-            if (!(checkCoordValues(xCoord) && checkCoordValues(yCoord)))
+    private void removeItem() {
+        try {
+            char shelf = dropdownShelf.getSelectedItem().toString().charAt(0);
+            if (!(checkCoordValues(textXcoord) && checkCoordValues(textYcoord)))
                 return;
-            int tempX = Integer.parseInt(xCoord.getText());
-            int tempY = Integer.parseInt(xCoord.getText());
-
-            if (submitDialog("Item einfuegen", "Moechtest du das Item " + tempArtName + " (Teile-Nr.: " + tempPartNo + ") in das Lager übernehmen?")) {
-                Item item = new Item(tempArtName, tempPartNo, tempSize, tempAmount, dropdown.getSelectedItem().toString().charAt(0), tempX, tempY);
-                d.insertItem(item, item.getShelf(), item.getXcoord(), item.getYcoord());
-            } else
-                System.out.println("[Error]: Submit denied");
+            int x = Integer.parseInt(textXcoord.getText());
+            int y = Integer.parseInt(textXcoord.getText());
+            Item item = d.getItem(shelf, x, y);
+            if (submitDialog("Item entfernen", "Möchtest du das Item " + item.getArticleName() + " (Teile-Nr.: " + item.getPartNumber() + ") aus dem Lager entfernen?")) {
+                if (d.removeItem(shelf, x, y)) {
+                    System.out.println("[System]: Removal successful");
+                    JOptionPane.showMessageDialog(this, "Das Entfernen war erfolgreich.", "Erfoglreich entfernt", JOptionPane.INFORMATION_MESSAGE);
+                    clearAllTextfields();
+                } else {
+                    System.out.println("[System]: Removal not successful");
+                }
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("[Error]: NumberFormatException");
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Das Item enthält Werte, welche nicht übernommen werden konnten.", "Falsche Argumente", JOptionPane.ERROR_MESSAGE);
+        } catch (NullPointerException e) {
+            System.out.println("[Error]: NullPointerException");
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Das Lager enthält kein Item in diesem Regalfach.", "Regal leer", JOptionPane.WARNING_MESSAGE);
         }
     }
 

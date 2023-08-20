@@ -1,16 +1,17 @@
+import java.io.Serializable;
 import java.util.Arrays;
 
-public class Item
+public class Item implements Serializable //Item-Klasse ist enthalten in zu speicherndem Objekt, deswegen Implementierung des Serializable-Interface
 {
     private String articleName;
     private int partNumber;
     private double size;
-    private int amount ;
+    private int amount;
     private char shelf;
     private int xCoordinate;
     private int yCoordinate;
-    public Item(String articleName, int partNumber, double size, int amount, char shelf, int x, int y)
-    {
+
+    public Item(String articleName, int partNumber, double size, int amount, char shelf, int x, int y) {
         this.articleName = articleName;
         this.partNumber = partNumber;
         this.size = size;
@@ -20,44 +21,43 @@ public class Item
         this.yCoordinate = y;
     }
 
-    public void printDetails()
-    {
-        System.out.println(articleName + " \t| " + partNumber + " \t| " + size + " \t| " + shelf + " [ " + xCoordinate + " | " + yCoordinate + " ]" );
+    public void printDetails() {
+        System.out.println(articleName + " \t| " + partNumber + " \t| " + size + " \t| " + shelf + " [ " + xCoordinate + " | " + yCoordinate + " ]");
     }
 
-    public String getArticleName()
-    {
+    public String getArticleName() {
         return articleName;
     }
 
-    public int getPartNumber()
-    {
+    public int getPartNumber() {
         return partNumber;
     }
 
-    public double getSize()
-    {
+    public double getSize() {
         return size;
     }
 
-    public int getAmount()
-    {
+    public int getAmount() {
         return amount;
     }
 
-    public char getShelf() {return shelf;}
-    public int getXcoord()
-    {
+    public char getShelf() {
+        return shelf;
+    }
+
+    public int getXcoord() {
         return xCoordinate;
     }
-    public int getYcoord()
-    {
+
+    public int getYcoord() {
         return yCoordinate;
     }
 
-    public void increaseSize(double add)
-    {size += add;}
+    public void increaseSize(double add) {
+        size += add;
+    }
 
-    public void increaseAmount(double add)
-    { amount += add;}
+    public void increaseAmount(double add) {
+        amount += add;
+    }
 }
