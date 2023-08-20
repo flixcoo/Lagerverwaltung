@@ -38,12 +38,10 @@ public class LagerverwaltungGUI extends JFrame {
 
     //Menu
     private final JMenuBar menubar;
-    private final JMenu dataMenuButton;
-    private final JMenu itemMenuButton;
-    private final JMenu debugMenuButton;
-    private final JMenuItem exitButton;
-    private final JMenuItem addItemButton;
-    private final JMenuItem removeItemButton;
+    private final JMenu dataMenu;
+    private final JMenu viewMenu;
+    private final JMenuItem exitMenuButton;
+    private final JMenuItem clearMenuButton;
 
 
     public LagerverwaltungGUI(LagerverwaltungData data) {
@@ -54,26 +52,18 @@ public class LagerverwaltungGUI extends JFrame {
         menubar = new JMenuBar();
 
         //Datei-Menu
-        dataMenuButton = new JMenu("Datei");
-        menubar.add(dataMenuButton);
+        dataMenu = new JMenu("Datei");
+        menubar.add(dataMenu);
 
-        exitButton = new JMenuItem("Beenden");
-        dataMenuButton.add(exitButton);
+        exitMenuButton = new JMenuItem("Beenden");
+        dataMenu.add(exitMenuButton);
 
         //Debug-Menu
-        debugMenuButton = new JMenu("Debug");
-        menubar.add(debugMenuButton);
+        viewMenu = new JMenu("Ansicht");
+        menubar.add(viewMenu);
 
-        //Item-Menu
-        itemMenuButton = new JMenu("Item");
-        menubar.add(itemMenuButton);
-
-        addItemButton = new JMenuItem("Item hinzufügen");
-        itemMenuButton.add(addItemButton);
-
-        removeItemButton = new JMenuItem("Item entfernen");
-        itemMenuButton.add(removeItemButton);
-
+        clearMenuButton = new JMenuItem("Clear");
+        viewMenu.add(clearMenuButton);
 
         this.setJMenuBar(menubar);
 
@@ -119,7 +109,7 @@ public class LagerverwaltungGUI extends JFrame {
         insertButton.setEnabled(false);
         buttonPanel.add(insertButton);
 
-        removeButton = new JButton("Item entfernen");
+        removeButton = new JButton("Fach leeren");
         removeButton.setEnabled(false);
         buttonPanel.add(removeButton);
 
@@ -170,10 +160,11 @@ public class LagerverwaltungGUI extends JFrame {
         //Action-Listener
         callButton.addActionListener(e -> callItem());
         insertButton.addActionListener(e -> insertItem());
-        exitButton.addActionListener(e -> exit());
+        exitMenuButton.addActionListener(e -> exit());
         clearButton.addActionListener(e -> clearAllTextfields());
         removeButton.addActionListener(e -> removeItem());
         storageButton.addActionListener(e -> showStorage());
+        clearMenuButton.addActionListener(e -> clearAllTextfields());
 
 
         //Document-Listener
@@ -221,6 +212,7 @@ public class LagerverwaltungGUI extends JFrame {
 
             if(d.isShelfUnitEmpty(shelfname,x,y)){
                 JOptionPane.showMessageDialog(this, "Dieses Regalfach hat keinen Inhalt.", "Kein Inhalt", JOptionPane.WARNING_MESSAGE);
+                clearAllTextfields();
                 return;
             }
 
@@ -294,7 +286,7 @@ public class LagerverwaltungGUI extends JFrame {
             if (submitDialog("Item entfernen", "Möchtest du das Item " + item.getArticleName() + " (Teile-Nr.: " + item.getPartNumber() + ") aus dem Lager entfernen?")) {
                 if (d.removeItem(shelf, x, y)) {
                     System.out.println("[System]: Removal successful");
-                    JOptionPane.showMessageDialog(this, "Das Entfernen war erfolgreich.", "Erfoglreich entfernt", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Das Entfernen war erfolgreich.", "Erfolgreich entfernt", JOptionPane.INFORMATION_MESSAGE);
                     clearAllTextfields();
                 } else {
                     System.out.println("[System]: Removal not successful");

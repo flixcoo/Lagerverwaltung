@@ -29,8 +29,7 @@ public class StoragecontentPane {
         JOptionPane.showConfirmDialog(null, panel, "Lagerinhalt", JOptionPane.CLOSED_OPTION);
     }
 
-    private void columnFormatting()
-    {
+    private void columnFormatting() {
         table.getColumnModel().getColumn(0).setPreferredWidth(50);
         table.getColumnModel().getColumn(1).setPreferredWidth(40);
         table.getColumnModel().getColumn(2).setPreferredWidth(100);
@@ -40,43 +39,30 @@ public class StoragecontentPane {
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for(int i = 0; i < header.length;i++)
+        for (int i = 0; i < header.length; i++)
             table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
 
 
-
     }
-    private void fillTable(HashMap storage) {
-        for (char c : d.getShelfnames()) {
-            System.out.println("Shelf: " + c);
-            Item[][] item = (Item[][]) storage.get(c);
-            printArray(item);
-            int i = 0;
-             {
-                for (int j = 0; j < item.length; j++) {
-                    for (int k = 0; k < item[j].length; k++) {
-                        {
-                            System.out.println("i: " + i + ",j: " + j + ",k: " + k);
 
-                            try {
-                                System.out.println("Partnumber: " + String.valueOf(item[j][k].getPartNumber()));
-                            } catch (NullPointerException e) {
-                            }
-                            ;
-                            if(i < data.length) {
-                                try {
-                                    data[i][0] = String.valueOf(item[j][k].getShelf());
-                                    String unit = item[j][k].getXcoord() + " - " + item[j][k].getYcoord();
-                                    data[i][1] = unit;
-                                    data[i][2] = String.valueOf(item[j][k].getPartNumber());
-                                    data[i][3] = String.valueOf(item[j][k].getArticleName());
-                                    data[i][4] = String.valueOf(item[j][k].getSize());
-                                    data[i][5] = String.valueOf(item[j][k].getAmount());
-                                    i++;
-                                } catch (NullPointerException e) {
-                                    System.out.println("[Error]: NullPointerException");
-                                }
-                            }
+    private void fillTable(HashMap storage) {
+        int i = 0;
+        for (char c : d.getShelfnames()) {
+            Item[][] item = (Item[][]) storage.get(c);
+            for (int j = 0; j < item.length; j++) {
+                for (int k = 0; k < item[j].length; k++) {
+                    if (i < data.length && !d.isShelfUnitEmpty(c,j,k)) {
+                        try {
+                            data[i][0] = String.valueOf(item[j][k].getShelf());
+                            String unit = item[j][k].getXcoord() + " - " + item[j][k].getYcoord();
+                            data[i][1] = unit;
+                            data[i][2] = String.valueOf(item[j][k].getPartNumber());
+                            data[i][3] = String.valueOf(item[j][k].getArticleName());
+                            data[i][4] = String.valueOf(item[j][k].getSize());
+                            data[i][5] = String.valueOf(item[j][k].getAmount());
+                            i++;
+                        } catch (NullPointerException e) {
+                            System.err.println("[Error]: NullPointerException\n[Error]: Couldnt acces item");
                         }
                     }
                 }

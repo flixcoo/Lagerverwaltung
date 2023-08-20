@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.HashMap;
 
 public class LagerverwaltungData {
-    private HashMap<Character, Item[][]> storage; // Key ist Regalname, Array ist Regalinhalt
+    private HashMap<Character, Item[][]> storage; // Key ist Regalname, Array ist Regal als 2D-Array
     private final char[] shelfnames = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
     double maxShelfUnitSize = 8.0;
     private final File file = new File("./data/data.txt");

@@ -13,7 +13,7 @@ public class Lagerverwaltung {
         Lagerverwaltung lagerverwaltung = new Lagerverwaltung();
         //Sichtbarkeit des Fensters
         lagerverwaltung.gui.pack();
-        lagerverwaltung.gui.setSize(500, 300);
+        lagerverwaltung.gui.setSize(400, 300);
         lagerverwaltung.gui.setLocationRelativeTo(null);
         lagerverwaltung.gui.setVisible(true);
         lagerverwaltung.gui.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
