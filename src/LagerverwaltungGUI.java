@@ -6,7 +6,7 @@ import java.awt.*;
 
 public class LagerverwaltungGUI extends JFrame {
     private final String[] shelfnames = {"A", "B", "C", "D", "E", "F", "G", "H"};
-    private final String[] shelfNums = {"1","2","3","4","5","6","7","8","9","10"}; //ToDo
+    private final String[] shelfNums = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}; //ToDo
     private LagerverwaltungData d;
 
     //Search-Area
@@ -181,18 +181,21 @@ public class LagerverwaltungGUI extends JFrame {
             public void changedUpdate(DocumentEvent e) {
                 changed();
             }
+
             public void removeUpdate(DocumentEvent e) {
                 changed();
             }
+
             public void insertUpdate(DocumentEvent e) {
                 changed();
             }
+
             public void changed() {
                 if (textYcoord.getText().equals("") || textXcoord.getText().equals("")) {
                     callButton.setEnabled(false);
                     removeButton.setEnabled(false);
                     insertButton.setEnabled(false);
-                } else if(!((textArtName.getText().equals("") || textPartNo.getText().equals("")) ||
+                } else if (!((textArtName.getText().equals("") || textPartNo.getText().equals("")) ||
                         (textSize.getText().equals("") || textAmount.getText().equals(""))) ||
                         (textXcoord.getText().equals("") || textYcoord.getText().equals(""))) {
                     insertButton.setEnabled(true);
@@ -208,15 +211,24 @@ public class LagerverwaltungGUI extends JFrame {
         });
 
         textYcoord.getDocument().addDocumentListener(new DocumentListener() {
-            public void changedUpdate(DocumentEvent e) {changed();}
-            public void removeUpdate(DocumentEvent e) {changed();}
-            public void insertUpdate(DocumentEvent e) {changed();}
+            public void changedUpdate(DocumentEvent e) {
+                changed();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                changed();
+            }
+
+            public void insertUpdate(DocumentEvent e) {
+                changed();
+            }
+
             private void changed() {
                 if (textYcoord.getText().equals("") || textXcoord.getText().equals("")) {
                     callButton.setEnabled(false);
                     removeButton.setEnabled(false);
                     insertButton.setEnabled(false);
-                } else if(!((textArtName.getText().equals("") || textPartNo.getText().equals("")) ||
+                } else if (!((textArtName.getText().equals("") || textPartNo.getText().equals("")) ||
                         (textSize.getText().equals("") || textAmount.getText().equals(""))) ||
                         (textXcoord.getText().equals("") || textYcoord.getText().equals(""))) {
                     insertButton.setEnabled(true);
@@ -232,9 +244,18 @@ public class LagerverwaltungGUI extends JFrame {
         });
 
         textArtName.getDocument().addDocumentListener(new DocumentListener() {
-            public void changedUpdate(DocumentEvent e) {changed();}
-            public void removeUpdate(DocumentEvent e) {changed();}
-            public void insertUpdate(DocumentEvent e) {changed();}
+            public void changedUpdate(DocumentEvent e) {
+                changed();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                changed();
+            }
+
+            public void insertUpdate(DocumentEvent e) {
+                changed();
+            }
+
             public void changed() {
                 if (((textArtName.getText().equals("") || textPartNo.getText().equals("")) ||
                         (textSize.getText().equals("") || textAmount.getText().equals(""))) ||
@@ -251,9 +272,17 @@ public class LagerverwaltungGUI extends JFrame {
         });
 
         textPartNo.getDocument().addDocumentListener(new DocumentListener() {
-            public void changedUpdate(DocumentEvent e) {changed();}
-            public void removeUpdate(DocumentEvent e) {changed();}
-            public void insertUpdate(DocumentEvent e) {changed();}
+            public void changedUpdate(DocumentEvent e) {
+                changed();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                changed();
+            }
+
+            public void insertUpdate(DocumentEvent e) {
+                changed();
+            }
 
             public void changed() {
                 if (((textArtName.getText().equals("") || textPartNo.getText().equals("")) ||
@@ -271,9 +300,18 @@ public class LagerverwaltungGUI extends JFrame {
         });
 
         textSize.getDocument().addDocumentListener(new DocumentListener() {
-            public void changedUpdate(DocumentEvent e) {changed();}
-            public void removeUpdate(DocumentEvent e) {changed();}
-            public void insertUpdate(DocumentEvent e) {changed();}
+            public void changedUpdate(DocumentEvent e) {
+                changed();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                changed();
+            }
+
+            public void insertUpdate(DocumentEvent e) {
+                changed();
+            }
+
             public void changed() {
                 if (((textArtName.getText().equals("") || textPartNo.getText().equals("")) ||
                         (textSize.getText().equals("") || textAmount.getText().equals(""))) ||
@@ -290,9 +328,18 @@ public class LagerverwaltungGUI extends JFrame {
         });
 
         textAmount.getDocument().addDocumentListener(new DocumentListener() {
-            public void changedUpdate(DocumentEvent e) {changed();}
-            public void removeUpdate(DocumentEvent e) {changed();}
-            public void insertUpdate(DocumentEvent e) {changed();}
+            public void changedUpdate(DocumentEvent e) {
+                changed();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                changed();
+            }
+
+            public void insertUpdate(DocumentEvent e) {
+                changed();
+            }
+
             public void changed() {
                 if (((textArtName.getText().equals("") || textPartNo.getText().equals("")) ||
                         (textSize.getText().equals("") || textAmount.getText().equals(""))) ||
@@ -360,8 +407,8 @@ public class LagerverwaltungGUI extends JFrame {
     private void insertItem() {
         if (!(checkCoordValues(textXcoord) && checkCoordValues(textYcoord)))
             return;
-        
-        if (submitDialog("Item einfügen", "Möchtest du "+ textAmount.getText() +"x " + textArtName.getText() + " (Teile-Nr.: " + textPartNo.getText() + ") in das Lager übernehmen?")) {
+
+        if (submitDialog("Item einfügen", "Möchtest du " + textAmount.getText() + "x " + textArtName.getText() + " (Teile-Nr.: " + textPartNo.getText() + ") in das Lager übernehmen?")) {
             try {
                 Item item = new Item(textArtName.getText(),
                         Integer.parseInt(textPartNo.getText()),
@@ -370,10 +417,21 @@ public class LagerverwaltungGUI extends JFrame {
                         dropdownShelf.getSelectedItem().toString().charAt(0),
                         Integer.parseInt(textXcoord.getText()),
                         Integer.parseInt(textYcoord.getText()));
-                if(d.insertItem(item, item.getShelf(), item.getXcoord(), item.getYcoord()))
+                if(!d.isPartNoEqual(item, d.getItem(item.getShelf(), item.getXcoord(), item.getYcoord())))
+                {
+                    JOptionPane.showMessageDialog(this, "Das Item konnte nicht hinzugefügt werden.\nGrund: Das Fach ist durch ein anderes Item belegt.", "Fehlgeschlagen", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if((item.getSize() + d.getItem(item.getShelf(), item.getXcoord(), item.getYcoord()).getSize()) > 8.0)
+                    JOptionPane.showMessageDialog(this, "Das Item konnte nicht hinzugefügt werden.\nGrund: Das Item ist zu groß.", "Fehlgeschlagen", JOptionPane.ERROR_MESSAGE);
+
+                if (d.insertItem(item, item.getShelf(), item.getXcoord(), item.getYcoord()))
                     System.out.println("[System]: Insert successful");
-                else
+                else {
                     System.out.println("[System]: Insert not successful");
+                    JOptionPane.showMessageDialog(this, "Das Item konnte nicht hinzugefügt werden.\nMögliche Gründe: Fach ist voll, Beschädigtes Item-Objekt", "Fehlgeschlagen", JOptionPane.ERROR_MESSAGE);
+                }
             } catch (NumberFormatException e) {
                 System.err.println("[Error]: NumberFormatException");
                 e.printStackTrace();
@@ -383,17 +441,16 @@ public class LagerverwaltungGUI extends JFrame {
             System.out.println("[info]: Submit denied");
     }
 
-    private void removeItem()
-    {
-        try{
+    private void removeItem() {
+        try {
             char shelf = dropdownShelf.getSelectedItem().toString().charAt(0);
-            if(!(checkCoordValues(textXcoord) && checkCoordValues(textYcoord)))
+            if (!(checkCoordValues(textXcoord) && checkCoordValues(textYcoord)))
                 return;
             int x = Integer.parseInt(textXcoord.getText());
             int y = Integer.parseInt(textXcoord.getText());
-            Item item = d.getItem(shelf,x,y);
+            Item item = d.getItem(shelf, x, y);
             if (submitDialog("Item entfernen", "Möchtest du das Item " + item.getArticleName() + " (Teile-Nr.: " + item.getPartNumber() + ") aus dem Lager entfernen?")) {
-                if(d.removeItem(shelf, x, y)) {
+                if (d.removeItem(shelf, x, y)) {
                     System.out.println("[System]: Removal successful");
                     JOptionPane.showMessageDialog(this, "Das Entfernen war erfolgreich.", "Erfoglreich entfernt", JOptionPane.INFORMATION_MESSAGE);
                     clearAllTextfields();
@@ -401,16 +458,17 @@ public class LagerverwaltungGUI extends JFrame {
                     System.out.println("[System]: Removal not successful");
                 }
             }
-        } catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             System.out.println("[Error]: NumberFormatException");
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Das Item enthält Werte, welche nicht übernommen werden konnten.", "Falsche Argumente", JOptionPane.ERROR_MESSAGE);
-        }catch(NullPointerException e){
+        } catch (NullPointerException e) {
             System.out.println("[Error]: NullPointerException");
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Das Lager enthält kein Item in diesem Regalfach.", "Regal leer", JOptionPane.WARNING_MESSAGE);
         }
     }
+
     private void clearAllTextfields() {
         textAmount.setText("");
         textSize.setText("");
