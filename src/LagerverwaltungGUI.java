@@ -213,10 +213,16 @@ public class LagerverwaltungGUI extends JFrame {
             int y = Integer.parseInt(textYcoord.getText());
             Item item = null; //Dummy-Object
 
+            if(d.isShelfUnitEmpty(shelfname,x,y)){
+                JOptionPane.showMessageDialog(this, "Dieses Regalfach hat keinen Inhalt.", "Kein Inhalt", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
             try {
                 item = d.getItem(shelfname, x, y);
                 item.printDetails();
             } catch (NullPointerException e) {
+                System.err.println("[Error]: Item not");
                 System.err.println("[Error]: Nullpointerexception");
                 e.printStackTrace();
                 clearAllTextfields();
