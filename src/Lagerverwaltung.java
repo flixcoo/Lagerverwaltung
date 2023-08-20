@@ -13,7 +13,6 @@ public class Lagerverwaltung
     public static void main(String[] args)
     {
         Lagerverwaltung lagerverwaltung = new Lagerverwaltung();
-
         //Sichtbarkeit des Fensters
         lagerverwaltung.gui.pack();
         lagerverwaltung.gui.setSize(500,300);
