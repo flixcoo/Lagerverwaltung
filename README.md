@@ -1,7 +1,6 @@
 # Lagerverwaltung
 
-Dies ist mein Prüfungsprojekt für das Modul Anwendungsorientierte Programmierung an der Hochschule für Technik, Wirtschaft und Kultur (HTWK) Leipzig.
-Es stellt eine Lagerverwaltung dar, mit welcher auf die verschiedenen Fächer zugegriffen werden kann, Artikel entfernt oder hinzugefügt werden können bzw. alle Artikel des Lager angezeigt werden können.
+Dieses Projekt entstand in meinem 2. Semester an der Hochschule für Technik, Wirtschaft und Kultur Leipzig (HTWK) als Prüfungsleistung für das Modul _Anwendungsorientierte Programmierung_. Es stellt eine Lagerverwaltung dar, mit welcher auf die verschiedenen Fächer zugegriffen werden kann, Artikel entfernt oder hinzugefügt werden können bzw. alle Artikel des Lager angezeigt werden können.
 
 ## Lager
 
